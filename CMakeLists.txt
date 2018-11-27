@@ -26,6 +26,8 @@ option(SLIC3R_PROFILE 			"Compile Slic3r with an invasive Shiny profiler" 0)
 option(SLIC3R_MSVC_COMPILE_PARALLEL "Compile on Visual Studio in parallel" 1)
 option(SLIC3R_MSVC_PDB          "Generate PDB files on MSVC in Release mode" 1)
 option(SLIC3R_PERL_XS           "Compile XS Perl module and enable Perl unit and integration tests" 0)
+option(SLIC3R_PCH               "Enable precompiled headers (suitable on Windows)" 1)
+option(SLIC3R_COTIRE            "Enable Cotire (COmpile TIme REducer)" 0)
 option(SLIC3R_ASAN              "Enable ASan on Clang and GCC" 0)
 option(SLIC3R_SYNTAXONLY        "Only perform source code correctness checking, no binary output (UNIX only)" 0)
 
@@ -46,6 +48,23 @@ message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 
 # Add our own cmake module path.
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
+
+if (SLIC3R_SYNTAXONLY)
+    message(STATUS "SLIC3R_SYNTAXONLY on: Performing a check-only build")
+    set(SLIC3R_PCH 0 CACHE BOOL "" FORCE)
+    set(SLIC3R_COTIRE 0 CACHE BOOL "" FORCE)
+endif ()
+
+if (SLIC3R_COTIRE)
+    set(SLIC3R_PCH 0 CACHE BOOL "" FORCE)
+    message(STATUS "SLIC3R_COTIRE on: Using Cotire")
+    include(cotire)
+endif ()
+
+if (SLIC3R_PCH)
+    message(STATUS "SLIC3R_PCH on: Using precompiled headers")
+endif ()
+
 
 enable_testing ()
 

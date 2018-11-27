@@ -1,7 +1,9 @@
 project(libslic3r_gui)
 cmake_minimum_required(VERSION 2.6)
 
-include(PrecompiledHeader)
+if (SLIC3R_PCH)
+    include(PrecompiledHeader)
+endif ()
 
 add_library(libslic3r_gui STATIC
     pchheader.cpp
@@ -21,7 +23,7 @@ add_library(libslic3r_gui STATIC
     GUI/3DScene.cpp
     GUI/3DScene.hpp
     GUI/GLShader.cpp
-    GUI/GLShader.hpp    
+    GUI/GLShader.hpp
     GUI/GLCanvas3D.hpp
     GUI/GLCanvas3D.cpp
     GUI/GLCanvas3DManager.hpp
@@ -126,6 +128,10 @@ add_library(libslic3r_gui STATIC
 )
 
 target_link_libraries(libslic3r_gui libslic3r avrdude imgui)
-if (NOT SLIC3R_SYNTAXONLY)
+
+if (SLIC3R_PCH)
     add_precompiled_header(libslic3r_gui pchheader.hpp FORCEINCLUDE)
+elseif (SLIC3R_COTIRE)
+    set_target_properties(libslic3r_gui PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "${CMAKE_CURRENT_SOURCE_DIR}/pchheader.hpp")
+    cotire(libslic3r_gui)
 endif ()
