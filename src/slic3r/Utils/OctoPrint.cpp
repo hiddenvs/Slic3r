@@ -4,6 +4,8 @@
 #include <boost/format.hpp>
 #include <boost/log/trivial.hpp>
 
+#include <wx/progdlg.h>
+
 #include "libslic3r/PrintConfig.hpp"
 #include "slic3r/GUI/I18N.hpp"
 #include "slic3r/GUI/PrintHostDialogs.hpp"   // XXX

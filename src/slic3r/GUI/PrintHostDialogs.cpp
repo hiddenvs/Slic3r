@@ -9,6 +9,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/dataview.h>
 #include <wx/wupdlock.h>
 #include <wx/debug.h>

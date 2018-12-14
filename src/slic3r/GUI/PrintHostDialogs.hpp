@@ -17,7 +17,7 @@ class wxDataViewListCtrl;
 
 namespace Slic3r {
 
-class PrintHostJob;
+struct PrintHostJob;
 
 namespace GUI {
 
