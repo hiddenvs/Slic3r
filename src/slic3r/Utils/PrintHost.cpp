@@ -101,8 +101,8 @@ void PrintHostJobQueue::priv::perform_job(PrintHostJob the_job)
 
         if (channel_cancels.size_hint() > 0) {
             // Lock both queues
-            auto cancels = std::move(channel_cancels.lock_rw());
-            auto jobs = std::move(channel_jobs.lock_rw());
+            auto cancels = channel_cancels.lock_rw();
+            auto jobs = channel_jobs.lock_rw();
 
             for (size_t cancel_id : *cancels) {
                 if (cancel_id == job_id) {
