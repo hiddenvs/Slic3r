@@ -43,7 +43,7 @@ public:
 
     void append_job(const PrintHostJob &job);
 
-    virtual int ShowModal();
+    // virtual int ShowModal();
 private:
     wxDataViewListCtrl *job_list;
     int prev_width;

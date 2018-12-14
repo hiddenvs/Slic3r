@@ -70,23 +70,26 @@ PrintHostQueueDialog::PrintHostQueueDialog(wxWindow *parent)
     auto *topsizer = new wxBoxSizer(wxVERTICAL);
 
     job_list = new wxDataViewListCtrl(this, wxID_ANY);
+    job_list->AppendTextColumn("ID", wxDATAVIEW_CELL_INERT);
+    job_list->AppendProgressColumn("Progress", wxDATAVIEW_CELL_INERT);
+    job_list->AppendTextColumn("Status", wxDATAVIEW_CELL_INERT);
     job_list->AppendTextColumn("Host", wxDATAVIEW_CELL_INERT);
     job_list->AppendTextColumn("Filename", wxDATAVIEW_CELL_INERT);
-    job_list->AppendTextColumn("Status", wxDATAVIEW_CELL_INERT);
-    job_list->AppendProgressColumn("Progress", wxDATAVIEW_CELL_INERT);
 
     // XXX:
     wxVector<wxVariant> data;
+    data.push_back(wxVariant("1"));
+    data.push_back(wxVariant(0));
+    data.push_back(wxVariant("enqueued"));
     data.push_back(wxVariant("foobar.local"));
     data.push_back(wxVariant("barbaz.gcode"));
-    data.push_back(wxVariant("enqueued"));
-    data.push_back(wxVariant(0));
     job_list->AppendItem(data);
     data.clear();
+    data.push_back(wxVariant("2"));
+    data.push_back(wxVariant(50));
+    data.push_back(wxVariant("uploading"));
     data.push_back(wxVariant("quzqux.local"));
     data.push_back(wxVariant("frobnicator.gcode"));
-    data.push_back(wxVariant("uploading"));
-    data.push_back(wxVariant(50));
     job_list->AppendItem(data);
 
     auto *btnsizer = new wxBoxSizer(wxHORIZONTAL);
@@ -100,9 +103,9 @@ PrintHostQueueDialog::PrintHostQueueDialog(wxWindow *parent)
     topsizer->Add(btnsizer, 0, wxEXPAND);
     SetSizer(topsizer);
 
-    job_list->Bind(wxEVT_SIZE, [this](wxSizeEvent &evt) {
-        CallAfter([this]() { sanitize_col_widths(); });
-    });
+    // job_list->Bind(wxEVT_SIZE, [this](wxSizeEvent &evt) {
+    //     CallAfter([this]() { sanitize_col_widths(); });
+    // });
 }
 
 void PrintHostQueueDialog::append_job(const PrintHostJob &job)
@@ -110,20 +113,21 @@ void PrintHostQueueDialog::append_job(const PrintHostJob &job)
     wxCHECK_RET(!job.empty(), "PrintHostQueueDialog: Attempt to append an empty job");
 
     wxVector<wxVariant> fields;
+    fields.push_back(wxVariant(wxString::Format("%d", job_list->GetItemCount() + 1)));
+    fields.push_back(wxVariant(0));
+    fields.push_back(wxVariant("Enqueued"));
     fields.push_back(wxVariant(job.printhost->get_host()));
     fields.push_back(wxVariant(job.upload_data.upload_path.string()));
-    fields.push_back(wxVariant("Enqueued"));
-    fields.push_back(wxVariant(0));
     job_list->AppendItem(fields);
 }
 
-int PrintHostQueueDialog::ShowModal()
-{
-    CallAfter([this]() { sanitize_col_widths(); });
-    return wxDialog::ShowModal();
-}
+// int PrintHostQueueDialog::ShowModal()
+// {
+//     CallAfter([this]() { sanitize_col_widths(); });
+//     return wxDialog::ShowModal();
+// }
 
-void PrintHostQueueDialog::sanitize_col_widths()
+void PrintHostQueueDialog::sanitize_col_widths()    // XXX: remove
 {
     enum { PRORGESS_SIZE = 100 };
 
