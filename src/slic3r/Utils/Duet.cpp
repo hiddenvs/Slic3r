@@ -62,7 +62,7 @@ bool Duet::send_gcode(const std::string &filename) const
 	const auto errortitle = _(L("Error while uploading to the Duet"));
 	fs::path filepath(filename);
 
-	PrintHostSendDialog send_dialog(filepath.filename());
+	GUI::PrintHostSendDialog send_dialog(filepath.filename());
 	if (send_dialog.ShowModal() != wxID_OK) { return false; }
 
 	const bool print = send_dialog.start_print();
@@ -136,7 +136,7 @@ bool Duet::send_gcode(const std::string &filename) const
 	return res;
 }
 
-bool Duet::upload(PrintHostUpload upload_data) const
+bool Duet::upload(PrintHostUpload upload_data, Http::ProgressFn prorgess_fn) const
 {
 	throw "unimplemented";
 }

@@ -2,23 +2,24 @@
 #define slic3r_PrintHostSendDialog_hpp_
 
 #include <string>
-
 #include <boost/filesystem/path.hpp>
 
 #include <wx/string.h>
-#include <wx/frame.h>
-#include <wx/event.h>
-#include <wx/progdlg.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/checkbox.h>
+#include <wx/dialog.h>
 
-#include "slic3r/GUI/GUI.hpp"
-#include "slic3r/GUI/MsgDialog.hpp"
+#include "GUI.hpp"
+#include "MsgDialog.hpp"
 
+
+class wxTextCtrl;
+class wxCheckBox;
+class wxDataViewListCtrl;
 
 namespace Slic3r {
+
+class PrintHostJob;
+
+namespace GUI {
 
 
 class PrintHostSendDialog : public GUI::MsgDialog
@@ -38,12 +39,19 @@ private:
 class PrintHostQueueDialog : public wxDialog
 {
 public:
-    PrintHostQueueDialog();
+    PrintHostQueueDialog(wxWindow *parent);
 
+    void append_job(const PrintHostJob &job);
+
+    virtual int ShowModal();
 private:
+    wxDataViewListCtrl *job_list;
+    int prev_width;
+
+    void sanitize_col_widths();
 };
 
 
-}
+}}
 
 #endif

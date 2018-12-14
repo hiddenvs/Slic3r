@@ -66,7 +66,7 @@ bool OctoPrint::send_gcode(const std::string &filename) const
 	const auto errortitle = _(L("Error while uploading to the OctoPrint server"));
 	fs::path filepath(filename);
 
-	PrintHostSendDialog send_dialog(filepath.filename());
+	GUI::PrintHostSendDialog send_dialog(filepath.filename());
 	if (send_dialog.ShowModal() != wxID_OK) { return false; }
 
 	const bool print = send_dialog.start_print();
@@ -129,7 +129,7 @@ bool OctoPrint::send_gcode(const std::string &filename) const
 	return res;
 }
 
-bool OctoPrint::upload(PrintHostUpload upload_data) const
+bool OctoPrint::upload(PrintHostUpload upload_data, Http::ProgressFn prorgess_fn) const
 {
 	throw "unimplemented";
 }
